@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- adding admin head partials -->
+<!-- ======= Head ======= -->
+<%- include('partials/adminHead') %>
+<!-- End Head -->
+
+<body>
+
+  <!--   adding admin header partials-->
+  <!-- ======= Header ======= -->
+   <%- include('partials/adminHeader') %>
+  <!-- End Header -->
+
+  <!-- adding admin sidebar partials -->
+  <!-- ======= Sidebar ======= -->
+  <%- include('partials/adminSidebar') %>
+  <!-- End Sidebar -->
+
+  <main id="main" class="main">
+
+    <!-- Page Title-->
+    <div class="pagetitle">
+        <h1>Product Category</h1>
+        <nav>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/adminHome">Home</a></li>
+            <li class="breadcrumb-item active">Category</li>
+          </ol>
+        </nav>
+    </div><!-- End Page Title -->
+    <br>
+    <h1 class="d-flex justify-content-center">Category Information</h1>
+    <br>
+    
+    <section class="section">
+        <div class="row">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <div>
+                      <h2 class="d-flex justify-content-center my-3 my-sm-5">Manage Category</h2>
+                    </div>
+
+                    <div class="d-flex justify-content-end my-3 m-sm-5">
+                      <a class="btn btn-success" href="/admin/products/category/add">NEW CATEGORY</a>
+                    </div>
+                        
+                    <!-- Table with hoverable rows -->
+                     <div class="table-responsive ">
+                        <table class="table datatable" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Parent</th>
+                                    <th scope="col">CreatedAt</th>
+                                    <th scope="col">UpdatedAt</th>       
+                                    <th scope="col">Edit</th>
+                                    <th scope="col">Remove</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% category.forEach((category, index) => { %> 
+                                    <tr>
+                                        <th scope="row"><%= index+1 %></th>
+                                        <td><%= category.name %></td>
+                                        <td><%= category.description %></td>
+                                        <td><%= category.parent ? category.parent : 'None' %></td>
+                                        <td><%= new Date(category.createdAt).toLocaleString() %></td>
+                                        <td><%= new Date(category.updatedAt).toLocaleString() %></td>   
+                                        <td><a href="/admin/products/category/edit/<%= category.name %>"><button class="btn btn-warning">Edit</button></a></td>
+                                        <td>
+                                            <form action="/admin/products/category/delete" method="post">                                                
+                                                <input type="hidden" name="name" value="<%= category.name %>">
+                                                <button class="btn btn-danger" type="submit" onclick="confirmDelete(event, '<%= category.name %>')">Delete</button>
+                                            </form>
+                                        </td> 
+                                        
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                          </table>
+                     </div>
+                    <!-- End Table with hoverable rows -->
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <% if(typeof err !== 'undefined') { %>
+                  <script>
+                    Swal.fire({
+                      title: "<%= error %>",
+                      icon: "error",
+                      showClass: {
+                        popup: `
+                          animate__animated
+                          animate__fadeInUp
+                          animate__faster
+                        `
+                      },
+                      hideClass: {
+                        popup: `
+                          animate__animated
+                          animate__fadeOutDown
+                          animate__faster
+                        `
+                      }
+                    });
+                  </script>
+                <% } %>
+                <% if(typeof message !== 'undefined'){ %>
+                  <script>
+                    var stopLoop = true;
+                    if(stopLoop){
+                        Swal.fire({
+                            title: "<%= message %>", 
+                            icon: "success",                             showClass: {
+                                popup: `
+                                animate__animated
+                                animate__fadeInUp
+                                animate__faster
+                                `
+                            },
+                            hideClass: {
+                                popup: `
+                                animate__animated
+                                animate__fadeOutDown
+                                animate__faster
+                                `
+                            }
+                        });
+                    }
+                    stopLoop = false;
+                  </script>                          
+                <% } %>
+            </div>
+
+        </div>
+    </section>
+
+  </main><!-- End #main -->
+
+
+  <!-- adding admin footer partials -->
+  <!-- ======= Footer ======= -->
+   <%- include('partials/adminFooter'); %>
+  <!-- End Footer -->
+   
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const dataTable = new DataTable('#myTable', {
+        searchable: true,
+        perPage: 10,
+    });
+});
+
+
+    function confirmDelete(event, userName) {
+      event.preventDefault(); // prevent the form from submitting immediately
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `You want to delete user ${userName}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, keep it'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          event.target.form.submit(); // submit the form if the user confirms the deletion
+        }
+      });
+    }
+
+   </script>
+
+</body>
+
+</html>

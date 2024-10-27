@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- adding admin head partials -->
+<!-- ======= Head ======= -->
+<%- include('partials/adminHead') %>
+<!-- End Head -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<body>
+
+  <main>
+    <div class="container">
+
+      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+              <div class="d-flex justify-content-center py-4">
+                <a href="/adminHome" class="logo d-flex align-items-center w-auto">
+                  <img src="../images/logo.png" alt="">
+                  <span class="d-none d-lg-block">LuxeWalk - Admin</span>
+                </a>
+              </div><!-- End Logo -->
+
+              <div class="card mb-3">
+
+                <div class="card-body">
+
+                  <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">Edit 
+                      <i><span style="color: #181869; font-size: inherit; font-weight: 800;"><%= userInfo.userName %>'s</span></i> Account 
+                    </h5>
+                    <p class="text-center small">Enter the details you want to edit</p>
+                  </div>
+
+                  <form class="row g-3  editUserForm"  action="/admin/users/manage/editUserDB/<%= userInfo.userName %>" method="post">
+                    <div class="col-12">
+                      <label for="yourName" class="form-label">Name</label>
+                      <input type="text" name="name" class="form-control" id="yourName" required value="<%= userInfo.name %>">
+                      <div id="error-name" style="display: none;" class="invalid-feedback">Please, Enter your name!</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="yourUsername" class="form-label">Username</label>
+                        <div class="input-group">
+                          <span class="input-group-text" id="inputGroupPrepend">@</span>
+                          <input type="text" name="userName" class="form-control" id="userName" required value="<%= userInfo.userName %>">
+                          <div id="error-userName" style="display: none;" class="invalid-feedback">Only Characters, Digits & UnderScores are allowed.</div>
+                        </div>
+                      </div>
+
+                    <div class="col-12">
+                      <label for="yourEmail" class="form-label">Email</label>
+                      <input type="email" name="email" class="form-control" id="email" required value="<%= userInfo.email %>">
+                      <div id="error-email" style="display: none;" class="invalid-feedback">Please enter a valid Email adddress!</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="yourMobile" class="form-label">Mobile</label>
+                        <input type="number" name="mobile" class="form-control" id="mobile" required value="<%= userInfo.mobile %>">
+                        <div id="error-mobile" style="display: none;" class="invalid-feedback">Please enter a valid Mobile number!</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="yourPassword" class="form-label">Password  <span style="color: rgb(194, 7, 7);">(if you want you can set a new password.)</span></label>
+                        <input type="password" name="password" class="form-control" id="Password"  value="">
+                        <div id="error-password" style="display: none;" class="invalid-feedback">Please enter your password between 6 - 8 digits.</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="confirm" class="form-label">Confirm Password</label>
+                      <input type="password" name="confirm" class="form-control" id="confirm"  value="">
+                      <div id="error-confirm" style="display: none;" class="invalid-feedback">Please confirm your password!</div>
+                    </div>
+
+                    <div class="mt-5">
+                        <% if(typeof err !== 'undefined') { %>
+                          <script>
+                            Swal.fire({
+                              title: "<%= err %>",
+                              icon: "error",
+                              showClass: {
+                                popup: `
+                                  animate__animated
+                                  animate__fadeInUp
+                                  animate__faster
+                                `
+                              },
+                              hideClass: {
+                                popup: `
+                                  animate__animated
+                                  animate__fadeOutDown
+                                  animate__faster
+                                `
+                              }
+                            });
+                          </script>
+                        <% } %>
+                        <% if(typeof message !== 'undefined'){ %>
+                          <script>
+                            Swal.fire({
+                              title: "<%= message %>", 
+                              icon: "success",                             showClass: {
+                                popup: `
+                                  animate__animated
+                                  animate__fadeInUp
+                                  animate__faster
+                                `
+                              },
+                              hideClass: {
+                                popup: `
+                                  animate__animated
+                                  animate__fadeOutDown
+                                  animate__faster
+                                `
+                              }
+                            });
+                          </script>                          <% } %>
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-between">
+                        <a href="/admin/users/manage" type="button" class="btn btn-outline-danger">Cancel</a>
+                      <button class="btn btn-outline-primary " type="submit">Edit Account</button>
+                    </div>
+                  </form>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main><!-- End #main -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- adding admin footer partials -->
+  <!-- ======= Footer ======= -->
+  <!-- <%- include('partials/adminFooter'); %> -->
+  <!-- End Footer -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+  // handling white space error
+  document.querySelectorAll('.whiteSpace').forEach(element => { 
+    element.addEventListener('keypress', event => {
+      if (event.key === ' ') {
+        event.preventDefault();
+        
+        var errorMessage = 'White space is not allowed';
+        var errorElement = document.getElementById('error-' + element.id);
+        errorElement.style.display = 'block';
+        errorElement.textContent = errorMessage;
+      } else {
+        var errorElement = document.getElementById('error-' + element.id);
+        errorElement.style.display = 'none';
+      }
+    })
+  });
+
+const editUserForm = document.querySelector('.editUserForm');
+
+editUserForm.addEventListener('submit', (event) => {
+
+    event.preventDefault();
+
+    const userName = document.getElementById('userName').value;
+    const email = document.getElementById('email').value;
+    const mobile = document.getElementById('mobile').value;
+    const password = document.getElementById('Password').value;
+    const confirmPassword = document.getElementById('confirm').value;
+
+    //userName validation
+    var error_userName = document.getElementById('error-userName');
+    const userNameValidation = /^[a-zA-Z0-9_]+$/;
+    if(!userName.match(userNameValidation)) {
+        error_userName.style.display = 'block';
+        error_userName.textContent = 'Please use only letters (a-z or A-Z), digits (0-9), and underscores (_).'
+        return;
+    } else {
+        error_userName.style.display = 'none';
+    }
+
+    //mobile number validation
+    var error_mobile = document.getElementById('error-mobile');
+    const mobileValidation = /^\d{10}$/;
+    if(!mobile.match(mobileValidation)) {
+        error_mobile.style.display = 'block';
+        return;
+    } else {
+        error_mobile.style.display = 'none';
+    }
+
+    //email validation Regex
+    var error_email = document.getElementById('error-email');
+    const emailValidation = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i;            
+    if(!email.match(emailValidation)) {
+        error_email.style.display = 'block';
+        return;
+    } else {
+        error_email.style.display = 'none';
+    };   
+    
+    if(password){
+      //password validation
+      var error_password = document.getElementById('error-password');
+      if(password.length < 6 || password.length > 8){
+          error_password.style.display = 'block';
+          return;
+      } else {
+          error_password.style.display = 'none';
+      };
+
+      //confirm password
+      var error_confirm = document.getElementById('error-confirm');
+      if(password !== confirmPassword){
+          error_confirm.style.display = 'block';
+          return;
+      } else {
+          error_confirm.style.display = 'none';
+          var error_password = document.getElementById('error-password');
+          error_password.style.display = 'none';
+      }
+    }
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonColor: "#d33",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "Yes, submit it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        editUserForm.submit();
+        Swal.fire({
+          title: "submitted!",
+          text: "Your file has been submitted.",
+          icon: "success"
+        });
+      }
+    });
+
+    });
+    
+  });
+
+</script>
+
+
+</body>
+
+</html>

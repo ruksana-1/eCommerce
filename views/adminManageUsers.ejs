@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- adding admin head partials -->
+<!-- ======= Head ======= -->
+<%- include('partials/adminHead') %>
+<!-- End Head -->
+<meta content="" name="description">
+<meta content="" name="keywords">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<body>
+
+  <!--   adding admin header partials-->
+  <!-- ======= Header ======= -->
+   <%- include('partials/adminHeader') %>
+  <!-- End Header -->
+
+  <!-- adding admin sidebar partials -->
+  <!-- ======= Sidebar ======= -->
+  <%- include('partials/adminSidebar') %>
+  <!-- End Sidebar -->
+
+  <main id="main" class="main">
+
+    <!-- Page Title-->
+    <div class="pagetitle">
+        <h1>Manage Users</h1>
+        <nav>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/adminHome">Home</a></li>
+            <li class="breadcrumb-item "><a href="/admin/users/allusers">Users</a></li>
+            <li class="breadcrumb-item active">Manage</li>
+          </ol>
+        </nav>
+    </div><!-- End Page Title -->
+    <br>
+    <h1 class="d-flex justify-content-center">All Users Information</h1>
+    <br>
+    
+    <section class="section">
+        <div class="row">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <div>
+                      <h2 class="d-flex justify-content-center my-3 my-sm-5">Manage Users</h2>
+                    </div>
+
+                    <div class="d-flex justify-content-end my-3 m-sm-5">
+                        <a class="btn btn-success" href="/admin/users/manage/add">ADD A NEW USER</a>
+                      </div>
+                        
+                    <!-- Table with hoverable rows -->
+                     <div class="table-responsive">
+                        <table class="table datatable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">User Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Mobile</th>
+                                    <th scope="col">CreatedAt</th>
+                                    <th scope="col">UpdatedAt</th>
+                                    <th scope="col">Edit</th>
+                                    <th scope="col">Block</th>
+                                    <th scope="col">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% userInfo.forEach((userInfo, index) => { %> 
+                                    <tr>
+                                        <th scope="row"><%= index+1 %></th>
+                                        <td><%= userInfo.name %></td>
+                                        <td><%= userInfo.userName %></td>
+                                        <td><%= userInfo.email %></td>
+                                        <td><%= userInfo.mobile %></td>
+                                        <td><%= new Date(userInfo.createdAt).toLocaleString() %></td>
+                                        <td><%= new Date(userInfo.updatedAt).toLocaleString() %></td>
+                                        <td><a href="/admin/users/manage/edit/<%= userInfo.userName %>" class="btn btn-warning">Edit</a></td>
+                                        <% if(userInfo.blocked === false){ %>
+                                            <td scope="col">
+                                              <form action="/admin/users/manage/block" method="post">
+                                                <input type="hidden" name="userName" value="<%= userInfo.userName %>">
+                                                <input type="hidden" name="blocked" value="<%= userInfo.blocked %>" > 
+                                                <button class="btn btn-primary" type="submit" onclick="confirmBlock(event, '<%= JSON.stringify(userInfo) %>')">Block</button>
+                                              </form>
+                                            </td> 
+                                        <% } else { %> 
+                                          <td scope="col">
+                                            <form action="/admin/users/manage/block" method="post">
+                                              <input type="hidden" name="userName" value="<%= userInfo.userName %>">
+                                              <input type="hidden" name="blocked" value="<%= userInfo.blocked %>" > 
+                                              <button class="btn btn-primary" type="submit" onclick="confirmBlock(event, '<%= JSON.stringify(userInfo) %>')">Unblock</button>
+                                            </form>
+                                          </td>                                         
+                                        <%} %>
+                                        <td>
+                                            <form action="/admin/users/manage/delete" method="post">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <input type="hidden" name="userName" value="<%= userInfo.userName %>">
+                                                <button class="btn btn-danger" type="submit" onclick="confirmDelete(event, '<%= userInfo.userName %>')">Delete</button>
+                                            </form>
+                                        </td>                                    
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                          </table>
+                     </div>
+                    <!-- End Table with hoverable rows -->
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <% if(typeof err !== 'undefined') { %>
+                  <script>
+                    Swal.fire({
+                      title: "<%= error %>",
+                      icon: "error",
+                      showClass: {
+                        popup: `
+                          animate__animated
+                          animate__fadeInUp
+                          animate__faster
+                        `
+                      },
+                      hideClass: {
+                        popup: `
+                          animate__animated
+                          animate__fadeOutDown
+                          animate__faster
+                        `
+                      }
+                    });
+                  </script>
+                <% } %>
+                <% if(typeof message !== 'undefined'){ %>
+                  <script>
+                    var stopLoop = true;
+                    if(stopLoop){
+                        Swal.fire({
+                            title: "<%= message %>", 
+                            icon: "success",                             showClass: {
+                                popup: `
+                                animate__animated
+                                animate__fadeInUp
+                                animate__faster
+                                `
+                            },
+                            hideClass: {
+                                popup: `
+                                animate__animated
+                                animate__fadeOutDown
+                                animate__faster
+                                `
+                            }
+                        });
+                    }
+                    stopLoop = false;
+                  </script>                          
+                <% } %>
+            </div>
+
+        </div>
+    </section>
+
+  </main><!-- End #main -->
+
+
+  <!-- adding admin footer partials -->
+  <!-- ======= Footer ======= -->
+   <%- include('partials/adminFooter'); %>
+  <!-- End Footer -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    function confirmDelete(event, userName) {
+      event.preventDefault(); // prevent the form from submitting immediately
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `You want to delete user ${userName}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, keep it'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          event.target.form.submit(); // submit the form if the user confirms the deletion
+        }
+      });
+    }
+
+    function confirmBlock(event, userInfo) {
+      event.preventDefault(); // prevent the form from submitting immediately
+      userInfo = JSON.parse(userInfo);
+      var title, text;
+      if( userInfo.blocked  === false){
+        title = 'Confirm Block';
+        text = `Do you want to block user ${userInfo.userName} ?`;
+
+      } else {
+        title = 'Confirm Unblock';
+        text = `Do you want to Unblock user ${userInfo.userName} ?`
+      }
+      Swal.fire({
+        title: title,
+        text: text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Proceed!',
+        cancelButtonText: 'No, Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          event.target.form.submit(); // submit the form if the user confirms the deletion
+        }
+      });
+    }
+  </script>
+
+</body>
+
+</html>

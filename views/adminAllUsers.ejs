@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- adding admin head partials -->
+<!-- ======= Head ======= -->
+<%- include('partials/adminHead') %>
+<!-- End Head -->
+
+<meta content="" name="description">
+<meta content="" name="keywords">
+
+<body>
+
+  <!--   adding admin header partials-->
+  <!-- ======= Header ======= -->
+   <%- include('partials/adminHeader') %>
+  <!-- End Header -->
+
+  <!-- adding admin sidebar partials -->
+  <!-- ======= Sidebar ======= -->
+  <%- include('partials/adminSidebar') %>
+  <!-- End Sidebar -->
+
+  <main id="main" class="main">
+
+    <!-- Page Title-->
+    <div class="pagetitle">
+        <h1>Users</h1>
+        <nav>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/adminHome">Home</a></li>
+            <li class="breadcrumb-item"><a href="/admin/users/allUsers">Users</a></li>
+            <li class="breadcrumb-item active">All Users</li>
+          </ol>
+        </nav>
+    </div><!-- End Page Title -->
+    <br>
+    <br>
+    <section class="section">
+        <div class="row">
+
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title d-flex justify-content-center">All Users Info</h3>
+
+                    <!-- Table with hoverable rows -->
+                     <div class="table-responsive">
+                        <table class="table datatable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">UserName</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Mobile</th>
+                                    <th scope="col">Password</th>
+                                    <th scope="col">CreatedAt</th>
+                                    <th scope="col">UpdatedAt</th>
+                                    <th scope="col">Edit</th>
+                                    <th scope="col">Blocked</th>
+                                    <th scope="col">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% userInfo.forEach((userInfo, index) => { %> 
+                                    <tr>
+                                        <th scope="row"><%= index+1 %></th>
+                                        <td><%= userInfo.name %></td>
+                                        <td><%= userInfo.userName %></td>
+                                        <td><%= userInfo.email %></td>
+                                        <td><%= userInfo.mobile %></td>
+                                        <td> ******** </td>
+                                        <td><%= new Date(userInfo.createdAt).toLocaleString() %></td>
+                                        <td><%= new Date(userInfo.updatedAt).toLocaleString() %></td>
+                                        <td><button class="btn btn-warning" disabled>Edit</button></td>
+                                        <% if(userInfo.blocked === false){ %>
+                                            <td scope="col"><button class="btn btn-primary active">Active</button></td> 
+                                        <% } else { %> 
+                                            <td scope="col"><button class="btn btn-primary" disabled>Blocked</button></td>
+                                        <%} %>
+                                        <td><button class="btn btn-danger" disabled>Delete</button></td>
+                                    </tr>
+                                    <% }); %>
+                            </tbody>
+                          </table>
+                     </div>
+                    <!-- End Table with hoverable rows -->
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+
+  </main><!-- End #main -->
+
+
+  <!-- adding admin footer partials -->
+  <!-- ======= Footer ======= -->
+   <%- include('partials/adminFooter'); %>
+  <!-- End Footer -->
+
+</body>
+
+</html>

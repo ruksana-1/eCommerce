@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="/styleSheets/style.css" rel="stylesheet" type="text/css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="title-text">
+      <div class="title login">Login Form</div>
+      <div class="title signup">Signup Form</div>
+    </div>
+    <div class="form-container">
+      <div class="slide-controls">
+        <input type="radio" name="slide" id="login" checked>
+        <input type="radio" name="slide" id="signup">
+        <label for="login" class="slide login">Login</label>
+        <label for="signup" class="slide signup">Signup</label>
+        <div class="slider-tab"></div>
+      </div>
+      <div class="form-inner">
+        <form action="/login" method="post" class="login form-login">
+          <div>
+            <label class="labels">Email / UserName </label>
+          </div>
+          <div class="field">
+            <input type="text" placeholder="Email/UserName" required name="email">
+          </div>
+          <div>
+            <label class="labels">Password</label>
+          </div>
+          <div class="field">
+            <input type="password" placeholder="Password" required name="password">
+          </div>
+          <div>
+            <% if (typeof error !== 'undefined') { %> 
+              <p style="display: flex; justify-content: center; color:red; font-weight : bold; padding : 7px;"> <%= error %> </p>
+            <% } %>
+            <div>
+              <% if (typeof msg !== 'undefined') { %> 
+                <p style="display: flex; justify-content: center; color:red; font-weight : bold; padding : 7px;"> <%= error %> </p>
+              <% } %>
+            </div>
+          </div>
+          <div class="pass-link"><a class="forget_psswrd" href="/forgotPassword">Forgot password?</a></div>
+          <div class="field btn">
+            <div class="btn-layer"></div>
+            <input type="submit" value="Login">
+          </div>
+          <div class="signup-link">Not a member? <a href="">Signup now</a></div>
+        </form>
+        <form action="/signup" method="post" class="signup form-signup">
+          <div class="signup-form-content">  
+            <div>
+              <label class="labels">Name <span style="color: red;">*</span></label>
+            </div>
+            <div class="field">
+              <input type="text" placeholder="Enter Your Name" required name="name">
+            </div>
+            <div>
+              <label class="labels">UserName <span style="color: red;">*</span></label>
+            </div>
+            <div class="field">
+              <input class="whiteSpace" id="userName" type="text" placeholder="Enter User Name" required name="userName">
+            </div>
+            <div>
+              <label class="labels">Email <span style="color: red;">*</span></label>
+            </div>
+            <div class="field">
+              <input id="email" type="email" placeholder="Email Address" required name="email">
+            </div>
+            <div class="labels">
+              <label>Mobile <span style="color: red;">*</span></label>
+            </div>
+            <div class="field">
+              <input type="number" placeholder="Enter Mobile Number" required name="mobile">
+            </div>
+            <div class="labels">
+              <label>Password <span style="color: red;">*</span></label>
+            </div>
+            <div class="field">
+              <input class="whiteSpace" id="password" type="password" placeholder="Password" required name="password">
+            </div>
+            <div>
+              <label class="labels">Confirm Password <span style="color: red;">*</span></label>
+            </div>
+            <div class="field">
+              <input type="password" placeholder="Confirm password" required name="confirm">
+            </div>
+            <div class="field btn">
+              <div class="btn-layer"></div>
+              <input type="submit" value="Signup">
+            </div>
+            <div class="signup-link">Already have an Account? <br> <a href="">Login now</a></div>
+          </div>
+          <% if (typeof err !== 'undefined') { %>
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    text: '<%= err %>',
+                    width : '50%'
+                });
+            </script>
+        <% } %>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="/scripts/scriptForm.js"></script>
+  <script src="/scripts/scriptSignup.js"></script>
+</body>
+</html>
