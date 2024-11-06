@@ -579,3 +579,15 @@ exports.adminDeleteCategory = async (req, res) => {
 // ADMIN PRODUCT MANAGEMENT
 //################################################################################################################
 
+exports.adminManageProducts = async (req, res) => {
+
+    res.render('adminManageProducts', { admin : req.admin.name });
+}
+
+exports.adminAddProduct = async (req, res) => {
+
+    const categories = await Category.find({});
+
+    res.render('adminAddProductForm', { categories });
+
+}

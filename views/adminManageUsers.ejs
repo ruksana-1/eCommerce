@@ -3,12 +3,9 @@
 
 <!-- adding admin head partials -->
 <!-- ======= Head ======= -->
-<%- include('partials/adminHead') %>
+  <%- include('partials/adminHead') %>
 <!-- End Head -->
-<meta content="" name="description">
-<meta content="" name="keywords">
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <body>
 
@@ -30,7 +27,7 @@
         <nav>
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/adminHome">Home</a></li>
-            <li class="breadcrumb-item "><a href="/admin/users/allusers">Users</a></li>
+            <li class="breadcrumb-item ">Users</li>
             <li class="breadcrumb-item active">Manage</li>
           </ol>
         </nav>
@@ -50,8 +47,8 @@
                     </div>
 
                     <div class="d-flex justify-content-end my-3 m-sm-5">
-                        <a class="btn btn-success" href="/admin/users/manage/add">ADD A NEW USER</a>
-                      </div>
+                      <a class="btn btn-success" href="/admin/users/manage/add">ADD A NEW USER</a>
+                    </div>
                         
                     <!-- Table with hoverable rows -->
                      <div class="table-responsive">
@@ -172,10 +169,10 @@
 
   <!-- adding admin footer partials -->
   <!-- ======= Footer ======= -->
-   <%- include('partials/adminFooter'); %>
+   <%- include('partials/adminFooter') %>
   <!-- End Footer -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     function confirmDelete(event, userName) {
       event.preventDefault(); // prevent the form from submitting immediately

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- adding admin head partials -->
+<!-- ======= Head ======= -->
+  <%- include('partials/adminHead') %>
+<!-- End Head -->
+
+<body>
+    
+    <!--   adding admin header partials-->
+    <!-- ======= Header ======= -->
+    <%- include('partials/adminHeader') %>
+    <!-- End Header -->
+    
+    <!-- adding admin sidebar partials -->
+    <!-- ======= Sidebar ======= -->
+    <%- include('partials/adminSidebar') %>
+    <!-- End Sidebar -->
+
+    <main id="main" class="main">
+
+        <!-- Page Title-->
+        <div class="pagetitle">
+            <h1>Manage Products</h1>
+            <nav>
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/adminHome">Home</a></li>
+                <li class="breadcrumb-item">Products</li>
+                <li class="breadcrumb-item active">Manage</li>
+              </ol>
+            </nav>
+        </div><!-- End Page Title -->
+        <br>
+        <h1 class="d-flex justify-content-center">All Products Information</h1>
+        <br>
+        
+        <section class="section">
+            <div class="row">
+    
+                <div class="card">
+                    <div class="card-body">
+    
+                        <div>
+                          <h2 class="d-flex justify-content-center my-3 my-sm-5">Manage Products</h2>
+                        </div>
+    
+                        <div class="d-flex justify-content-end my-3 m-sm-5">
+                          <a class="btn btn-success" href="/admin/products/manage/add">ADD A NEW PRODUCT</a>
+                        </div>
+
+
+                        <!-- Table with hoverable rows -->
+                        <div class="table-responsive">
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No.</th>
+                                        <th scope="col">Images</th>
+                                        <th scope="col">BrandName</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Category</th>                                         
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <tr>
+                                            <th scope="row"></th>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>                                                                        
+                                        </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- End Table with hoverable rows -->
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- adding admin footer partials -->
+    <!-- ======= Footer ======= -->
+        <%- include('partials/adminFooter') %>
+    <!-- End Footer -->
+
+</body>
+</html>

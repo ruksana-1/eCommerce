@@ -633,7 +633,8 @@ h6 {
 
   #main,
   #footer {
-    margin-left: 300px;
+   /* margin-left: 300px; */
+   margin-left: 0 ;
   }
 }
 

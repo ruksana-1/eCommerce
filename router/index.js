@@ -9,6 +9,7 @@ const { adminLOGIN, adminREGISTER, adminRegister, adminLogin, adminLogout, admin
         adminProfile, adminEditProfile, adminChangePassword, 
         adminAllUsers, adminManageUsers, adminAddUser, adminAddUserDB, adminEditUser, adminEditUserDB, adminDeleteUser, adminBlockUser,adminBlockedUsers, adminRecentlyDeletedUsers, 
         adminCategory, adminAddCategory, adminAddCategoryDB, adminEditCategory, adminEditCategoryDB, adminDeleteCategory,
+        adminManageProducts, adminAddProduct,
         } = require('../controllers/adminController');
 
 const router = express.Router();
@@ -68,4 +69,10 @@ router.get('/admin/products/category/edit/:name', authenticateToken, adminEditCa
 router.post('/admin/products/category/editDB/:name', authenticateToken, adminEditCategoryDB);
 router.post('/admin/products/category/delete', authenticateToken, adminDeleteCategory);
 
+//#########################################################################################################
+// ADMIN PRODUCT MANAGEMENT
+//#########################################################################################################
+
+router.get('/admin/products/manage', authenticateToken, adminManageProducts);
+router.get('/admin/products/manage/add', authenticateToken, adminAddProduct);
 module.exports = router;

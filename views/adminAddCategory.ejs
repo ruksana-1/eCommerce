@@ -6,8 +6,6 @@
 <%- include('partials/adminHead') %>
 <!-- End Head -->
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <body>
 
   <main>
@@ -129,43 +127,44 @@
   <!-- adding admin footer partials -->
   <!-- ======= Footer ======= -->
     <%- include('partials/adminFooter'); %> 
+  <!-- End admin footer partials -->
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
- 
-  document.addEventListener('DOMContentLoaded', () => {
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+  
+    document.addEventListener('DOMContentLoaded', () => {
 
-  const addCategoryForm = document.querySelector('.addCategoryForm');
+    const addCategoryForm = document.querySelector('.addCategoryForm');
 
-  addCategoryForm.addEventListener('submit', (event) => {
+    addCategoryForm.addEventListener('submit', (event) => {
 
-    event.preventDefault();
+      event.preventDefault();
 
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      cancelButtonColor: "#d33",
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: "Yes, submit it!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        addCategoryForm.submit();
-        Swal.fire({
-          title: "submitted!",
-          text: "Your file has been submitted.",
-          icon: "success",
-          timer : 10000,
-        });
-      }
-    });
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonColor: "#d33",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Yes, submit it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          addCategoryForm.submit();
+          Swal.fire({
+            title: "submitted!",
+            text: "Your file has been submitted.",
+            icon: "success",
+            timer : 10000,
+          });
+        }
+      });
 
-    });
+      });
 
-});
+  });
 
-</script>
+  </script>
 
 
 </body>

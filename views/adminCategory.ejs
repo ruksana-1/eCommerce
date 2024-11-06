@@ -26,6 +26,7 @@
         <nav>
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/adminHome">Home</a></li>
+            <li class="breadcrumb-item">Products</li>
             <li class="breadcrumb-item active">Category</li>
           </ol>
         </nav>
@@ -143,12 +144,13 @@
         </div>
     </section>
 
-  </main><!-- End #main -->
+  </main>
+  <!-- End #main -->
 
 
   <!-- adding admin footer partials -->
   <!-- ======= Footer ======= -->
-   <%- include('partials/adminFooter'); %>
+   <%- include('partials/adminFooter') %>
   <!-- End Footer -->
    
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -156,12 +158,12 @@
   <script>
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    const dataTable = new DataTable('#myTable', {
-        searchable: true,
-        perPage: 10,
+    document.addEventListener('DOMContentLoaded', () => {
+        const dataTable = new DataTable('#myTable', {
+            searchable: true,
+            perPage: 10,
+        });
     });
-});
 
 
     function confirmDelete(event, userName) {
@@ -180,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-   </script>
+  </script>
 
 </body>
 
