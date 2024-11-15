@@ -1,8 +1,11 @@
 const cron = require('node-cron');
 const { PasswordReset } = require('../models/modelUserSchema');
+//const { deleteFiles } = require('./deleteImageAndThumbnail');
 
 const deleteExpiredTokens = async () => {
     try{
+        //deleteFiles();
+        
         await PasswordReset.deleteMany({ tokenExpires : {$lt : Date.now()} });
 
         console.log('Expired tokens deleted successfully');

@@ -1,0 +1,139 @@
+<<!DOCTYPE html>
+<html lang="en">
+
+<!-- adding admin head partials -->
+<!-- ======= Head ======= -->
+<%- include('partials/adminHead') %>
+<!-- End Head -->
+
+<style>
+    .review-div{
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        background-color: #dfe3f259;
+        border-radius: 5px;
+        padding: 25px;
+        border: 2px dashed lightgrey;
+        margin: 0 5%;
+        color: #b3b4c4;;
+    }
+</style>
+<body>
+
+    <!--   adding admin header partials-->
+    <!-- ======= Header ======= -->
+    <%- include('partials/adminHeader') %>
+    <!-- End Header -->
+    
+    <!-- adding admin sidebar partials -->
+    <!-- ======= Sidebar ======= -->
+    <%- include('partials/adminSidebar') %>
+    <!-- End Sidebar -->
+    
+    <main id="main" class="main">
+        <!-- Page Title-->
+        <div class="pagetitle">
+            <h1>View Product</h1>
+            <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/adminHome">Home</a></li>
+                <li class="breadcrumb-item"><a href="/admin/products/manage">Products</a></li>
+                <li class="breadcrumb-item active">View</li>
+            </ol>
+            </nav>
+        </div>
+        <!-- End Page Title -->
+
+        <section>
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="col-12">
+                        <img id="mainImage" class="img-fluid" src="/<%= product.imagesPath[0] %>">
+                    </div>
+                    <div class="d-flex flex-row"> 
+                        <% for (let i = 0 ; i < product.thumbnailsPath.length ; i++) { %> 
+                            <div class="px-2 py-1">
+                                <a onclick="openImage('<%= product.imagesPath[i].replace(/\\/g, '/').replace(/{/g, '/') %>')">
+                                    <img style="cursor: pointer;" class="image-fluid" src="/<%= product.thumbnailsPath[i] %>">
+                                </a>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div>
+                        <h1><b><%= product.brandName %></b></h1>
+                    </div>
+                    <div>
+                        <h4><b><%= product.description %></b></h4>
+                    </div>
+                    <div>
+                        <% if(product.discount) { %> 
+                            <h5><b> Rs. <%= product.priceAfterDiscount %> &nbsp;&nbsp;&nbsp; MRP :&nbsp; <s><%= product.price %></s> &nbsp;&nbsp;&nbsp;  <span class="text-danger">(<%= product.discount %>% OFF)</span></b></h5>
+                        <% } else { %>
+                             <h5><b> Rs. <%= product.price %></b></h5>
+                        <% } %>
+                    </div>
+                    <div class="row py-5">
+                        <h5 class="pb-3"><b>Product Details</b></h5>
+                        <div class="px-5"> 
+                            <p class="col-12 col-md-6"><b>Product</b>  :  Footwear</p>
+                            <p class="col-12 col-md-6"><b>Brand</b>  :  <%= product.brandName %></p>
+                            <p class="col-12 col-md-6"><b>Type</b>  :  <%= product.type %></p>
+                            <p class="col-12 col-md-6"><b>Occation</b>  :  <%= product.occation %></p>
+                            <p class="col-12 col-md-6"><b>Gender</b>  :  <%= product.category.name %></p>
+                            <p class="col-12 col-md-6"><b>Stock Count</b>  :  <%= product.stockCount %></p>
+                            <p class="col-12"><b>Is Featured</b>  :  <% if(product.isFeatured) { %> Yes <% } else { %> No <% } %></p>
+                            <p class="col-12"><b>Description</b>  :  <%= product.description %></p>
+                            <p class="col-12"><b>Available Sizes</b>  :  <%= product.sizes %></p>
+                        </div>
+                        </ul>
+                    </div>
+                    <div class="row pb-5">
+                        <h5 class="pb-3"><b>Price Details</b></h5>
+                        <div class="px-5">
+                            <p class="col-12"><b>Original Price</b>  :  <%= product.price %></p>
+                            <p class="col-12"><b>Discount</b>  :  <% if(product.discount) { %> <span> <%= product.discount %>% </span> 
+                                <p class="col-12"><b>Discount Amount</b> :  <%= product.discountAmount %></p>
+                                <p class="col-12"><b>Price After Discount</b> :  <%= product.priceAfterDiscount %></p>
+                                <% } else { %> No <% } %>
+                            </p>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="review-div col">
+                    <h4 class="pb-3 text-dark"><b>Reviews</b></h4>
+                    <div >
+                        <% if(product.reviews.length <= 0 ){ %>
+                            <div class=" p-3 d-flex flex-center ">
+                                <p><b>No Reviews Yet...</b></p>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="my-5 d-flex justify-content-end">
+                    <button class="btn btn-primary"><a class="link-light" href="/admin/products/manage">Back to Products</a></button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- adding admin footer partials -->
+    <!-- ======= Footer ======= -->
+    <%- include('partials/adminFooter') %>
+    <!-- End Footer -->
+
+    <script>
+        console.log('<%= product.brandName %>');
+    
+        function openImage(imagePath) {
+            let image = document.getElementById('mainImage');
+            image.src = '/' + imagePath;
+        }
+    </script>
+</body>
+</html>

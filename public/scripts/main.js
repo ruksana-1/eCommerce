@@ -48,6 +48,17 @@
     })
   }
 
+  // Close sidebar when clicking outside
+  document.addEventListener('click', function(event) {
+    const sidebar = select('.sidebar'); 
+    const toggleBtn = select('.toggle-sidebar-btn');
+
+    // Check if the click is outside the sidebar and the toggle button
+    if (!sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+        select('body').classList.remove('toggle-sidebar'); // Hide the sidebar
+    }
+  });
+
   /**
    * Search bar toggle
    */

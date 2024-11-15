@@ -1,4 +1,5 @@
 const express = require('express');
+const upload = require('../middleware/multerConfig'); // importing multer
 const { home, login, signup,  forgotPassword, 
         resetPassword_link, resetPassword_form, resetPassword,
       } = require('../controllers/userController');
@@ -9,7 +10,7 @@ const { adminLOGIN, adminREGISTER, adminRegister, adminLogin, adminLogout, admin
         adminProfile, adminEditProfile, adminChangePassword, 
         adminAllUsers, adminManageUsers, adminAddUser, adminAddUserDB, adminEditUser, adminEditUserDB, adminDeleteUser, adminBlockUser,adminBlockedUsers, adminRecentlyDeletedUsers, 
         adminCategory, adminAddCategory, adminAddCategoryDB, adminEditCategory, adminEditCategoryDB, adminDeleteCategory,
-        adminManageProducts, adminAddProduct,
+        adminManageProducts, adminAddProduct, adminAddProductDB, adminViewProduct, adminEditProduct, adminEditProductDB,
         } = require('../controllers/adminController');
 
 const router = express.Router();
@@ -75,4 +76,8 @@ router.post('/admin/products/category/delete', authenticateToken, adminDeleteCat
 
 router.get('/admin/products/manage', authenticateToken, adminManageProducts);
 router.get('/admin/products/manage/add', authenticateToken, adminAddProduct);
+router.post('/admin/products/manage/addProductDB', authenticateToken, upload.array('images'), adminAddProductDB);
+router.get('/admin/products/manage/view/:id', authenticateToken, adminViewProduct);
+router.post('/admin/products/manage/edit', authenticateToken, adminEditProduct);
+router.post('/admin/products/manage/editProductDB',authenticateToken, upload.array('images'), adminEditProductDB)
 module.exports = router;

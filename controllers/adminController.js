@@ -5,8 +5,10 @@ const Category = require('../models/categorySchema');
 const bcrypt = require('bcrypt');
 const { createToken } = require('../middleware/jwtMiddleware');
 const blacklistToken = require('../utility/blacklistToken');
-const { name } = require('ejs');
-
+const path = require('path');
+const Product = require('../models/productSchema');
+const { handleImageUploads } = require('../helpers/handleImageUploads');
+const { deleteFiles } = require('../helpers/deleteImageAndThumbnail');
 
 //################################################################################################################
 // ADMIN LOGIN, SIGNUP, LOGOUT & HOME
@@ -155,9 +157,16 @@ exports.adminLogout = async (req, res) => {
         const token = req.cookies.jwt;
 
         if( token ){
+            deleteFiles(req);
             await blacklistToken( token );
-            res.clearCookie('jwt');
-            res.redirect('/admin');
+            req.session.destroy(error => {
+                if(error){
+                    return res.render('errorPage', { status :'500', error : 'Could not logout '})
+                }
+           
+                res.clearCookie('jwt');
+                res.redirect('/admin');
+            });
         }
     }
 
@@ -580,8 +589,27 @@ exports.adminDeleteCategory = async (req, res) => {
 //################################################################################################################
 
 exports.adminManageProducts = async (req, res) => {
+    try{
+        const products = await Product.find().select('_id thumbnailsPath brandName category price stockCount').populate('category');
 
-    res.render('adminManageProducts', { admin : req.admin.name });
+        console.log(products);
+
+        const productData = products.map( product => ({
+            _id : product._id,
+            thumbnailsPath : product.thumbnailsPath[0],
+            brandName : product.brandName,
+            description : product.description,
+            category : product.category,
+            price : product.price,
+            stockCount : product.stockCount,
+        }));
+
+        res.render('adminManageProducts', { admin : req.admin.name, products : productData });
+
+    } catch (error) {
+        console.error(error);
+        res.render('errorPage', {status : '500', error : 'Internal Server Error'});
+    }
 }
 
 exports.adminAddProduct = async (req, res) => {
@@ -590,4 +618,181 @@ exports.adminAddProduct = async (req, res) => {
 
     res.render('adminAddProductForm', { categories });
 
+}
+
+exports.adminAddProductDB = async (req, res) => {
+
+    console.log(req.body, req.files);
+    const { brandName,
+            description,
+            type,
+            occation,
+            category,
+            sizes,
+            price,
+            discount,
+            priceAfterDiscount,
+            discountAmount,
+            stockCount,
+            isFeatured, } = req.body;
+
+            const imagePaths = [];
+            const thumbnailPaths = [];
+
+            console.log('imagePaths :', imagePaths, 'thumbnailPaths : ', thumbnailPaths);
+
+            //await result of the function handleimageUploads()
+            const { imagePaths: newImagePaths, thumbnailPaths: newThumbnailPaths } = await handleImageUploads(req.files, imagePaths, thumbnailPaths);
+
+            console.log('After calling function imagePaths :', imagePaths, 'thumbnailPaths : ', thumbnailPaths);
+
+            let sizesArray = Array.isArray(sizes) ? sizes : (typeof sizes === 'string' ? sizes.split(',') : []);
+
+            const newProduct = new Product({
+                brandName,
+                description,
+                type,
+                occation,
+                category,
+                sizes : sizesArray,
+                price,
+                discount,
+                priceAfterDiscount,
+                discountAmount,
+                stockCount,
+                isFeatured,
+                imagesPath : newImagePaths,
+                thumbnailsPath : newThumbnailPaths,
+            });
+
+            try{
+                await newProduct.save();
+
+                const categories = await Category.find({});
+
+                res.render('adminAddProductForm', { message : 'Product added Successfully', categories : categories});
+            } catch (error) {
+                console.error('Error saving product : ', error);
+
+                // delete the images & thumbanail if the save fails
+                deleteFiles(newImagePaths);
+                deleteFiles(newThumbnailPaths);
+
+                const categories = await Category.find({});
+
+                res.render('adminAddProductForm', { err : 'Failed to add Product !', categories});
+            }
+
+}
+
+exports.adminViewProduct = async(req, res) => {
+
+    const product = await Product.findOne({ _id : req.params.id}).populate('category');
+
+    if(product){
+        res.render('adminViewProduct', { product, admin : req.admin.name });
+    }else{
+        res.render('errorPage', { status: '404', error : 'Product Not Found'});
+    }
+
+}
+
+exports.adminEditProduct = async(req, res) => {
+
+    const { id }= req.body;
+
+    const product = await Product.findOne({ _id : id }).populate('category');
+
+    const categories = await Category.find();
+    console.log(product);
+    res.render('adminEditProductForm', { categories, product })
+}
+
+exports.adminEditProductDB = async(req, res) => {
+
+    console.log(req.body.id);
+    const {
+        id,
+        brandName,
+        description,
+        type,
+        occation,
+        category,
+        sizes,
+        price,
+        discount,
+        priceAfterDiscount,
+        discountAmount,
+        stockCount,
+        isFeatured, } = req.body;
+
+        const product = await Product.findOne({ _id : id });
+
+        if (!product){
+            return res.render('errorPage', { status : '404', error : 'Product not found.'});
+        }
+
+        //store old image & thumbnail paths for deletion
+        const oldImagePaths = product.imagesPath;
+        const oldThumbnailPaths = product.thumbnailsPath;
+
+        product.brandName = brandName;
+        product.description = description;
+        product.type = type;
+        product.occation = occation;
+        product.category = category;
+        product.sizes = sizes;
+        product.price = price;
+        product.discount = discount;
+        product.discountAmount = discountAmount;
+        product.priceAfterDiscount = priceAfterDiscount;
+        product.stockCount = stockCount;
+        product.isFeatured = isFeatured;
+
+        if(req.files && req.files.length > 0){
+
+            // holding the paths for images and thumbanils
+            const imagePaths = [];
+            const thumbnailPaths =[];
+
+            // await result of the function handleimageUploads()
+            // storing the result to new variables named newImagePaths and newThumbanilPaths
+            //  imagePaths: newImagePaths is used here to rename the imagePaths property from the returned object to newImagePaths.
+            const { imagePaths : newImagePaths, thumbnailPaths : newThumbnailPaths } = await handleImageUploads(req.files, imagePaths, thumbnailPaths);
+
+            product.imagesPath = newImagePaths;
+            product.thumbnailsPath = newThumbnailPaths;
+
+            //delete image and thumbnails
+            deleteFiles(oldImagePaths);
+            deleteFiles(oldThumbnailPaths);
+    
+        }
+
+        const products = await Product.find({});
+
+        const productData = products.map( product => ({
+            _id : product._id,
+            thumbnailsPath : product.thumbnailsPath[0],
+            brandName : product.brandName,
+            description : product.description,
+            category : product.category,
+            price : product.price,
+            stockCount : product.stockCount,
+        }));
+
+        try{
+            await product.save();
+            res.render('adminManageProducts', { products : productData, admin : req.admin.role, message : 'Product Updated Successfully'});
+
+        } catch (error) {
+            console.error('Error saving product : ', error);
+
+            //delete image and thumbnails
+            deleteFiles(newImagePaths);
+            deleteFiles(newThumbnailPaths);
+
+            res.render('adminManageProducts', { products : productData, admin : req.admin.role, err : 'Failed to edit product !' });
+
+        }
 }

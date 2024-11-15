@@ -52,24 +52,44 @@
 
                         <!-- Table with hoverable rows -->
                         <div class="table-responsive">
-                            <table class="table datatable">
+                            <table class="table table-hover datatable">
                                 <thead>
                                     <tr>
                                         <th scope="col">No.</th>
-                                        <th scope="col">Images</th>
+                                        <th scope="col">Image</th>
                                         <th scope="col">BrandName</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Category</th>                                         
+                                        <th scope="col">Category</th> 
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Stock</th>
+                                        <th scope="col">View</th>
+                                        <th scope="col">Edit</th>
+                                        <th scope="col">Delete</th>                                     
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <% products.forEach((product, index) => { %> 
                                         <tr>
-                                            <th scope="row"></th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>                                                                        
+                                            <th scope="row"><%= index + 1 %></th>
+                                            <td scope="col"><img src="\<%= product.thumbnailsPath %>"></td>
+                                            <td scope="col"><%= product.brandName %></td>
+                                            <td scope="col"><%= product.category.name %></td> 
+                                            <td scope="col"><%= product.price %>.00</td>
+                                            <td scope="col"><%= product.stockCount %>pc</td>
+                                            <td scope="col"><a href="/admin/products/manage/view/<%= product._id %>"><button class="btn btn-primary">View</button></a></td>
+                                            <td scope="col">
+                                                <form action="/admin/products/manage/edit" method="post">
+                                                    <input type="hidden" name="id" value="<%= product._id %>">
+                                                    <button class="btn btn-warning">Edit</button>
+                                                </form>
+                                            </td>
+                                            <td scope="col">
+                                                <form action="/admin/products/manage/dalete" method="post">
+                                                    <input type="hidden" name="id" value="<%= product._id %>">
+                                                    <button class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </td>                                        
                                         </tr>
+                                    <% }) %>
                                 </tbody>
                             </table>
                         </div>
@@ -80,6 +100,52 @@
 
             </div>
         </section>
+
+        <div class="mt-5">
+            <% if(typeof err !== 'undefined') { %>
+              <script>
+                Swal.fire({
+                  title: "<%= err %>",
+                  icon: "error",
+                  showClass: {
+                    popup: `
+                      animate__animated-
+                      animate__fadeInUp
+                      animate__faster
+                    `
+                  },
+                  hideClass: {
+                    popup: `
+                      animate__animated
+                      animate__fadeOutDown
+                      animate__faster
+                    `
+                  }
+                });
+              </script>
+            <% } %>
+            <% if(typeof message !== 'undefined'){ %>
+              <script>
+                Swal.fire({
+                  title: "<%= message %>",
+                  icon: "success",                              showClass: {
+                    popup: `
+                      animate__animated
+                      animate__fadeInUp
+                      animate__faster
+                    `
+                  },
+                  hideClass: {
+                    popup: `
+                      animate__animated
+                      animate__fadeOutDown
+                      animate__faster
+                    `
+                  }
+                });
+              </script>                        
+            <% } %>
+        </div>
 
     </main>
 

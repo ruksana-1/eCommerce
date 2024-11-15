@@ -360,7 +360,7 @@ h6 {
 
 @media (min-width: 1200px) {
   .logo {
-    width: 280px;
+    width: 230px;
   }
 }
 
@@ -617,6 +617,9 @@ h6 {
   .sidebar {
     left: -300px;
   }
+  .toggle-sidebar .sidebar {
+    left: 0; /* Show sidebar when toggled */
+  }
 }
 
 .sidebar::-webkit-scrollbar {
@@ -635,6 +638,7 @@ h6 {
   #footer {
    /* margin-left: 300px; */
    margin-left: 0 ;
+   margin-left: 300px; /* Adjust main content margin for sidebar */
   }
 }
 

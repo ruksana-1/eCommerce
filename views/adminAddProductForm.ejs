@@ -12,6 +12,21 @@
       .wide-card {
           width: 200%;
       }
+      .back-btn{
+        width: 200%;
+      }
+  }
+
+  @media (max-width:1000px) {
+      .back-btn {
+          width: 100%; 
+          display: flex; 
+          justify-content: flex-end; 
+      }
+  }
+
+  label{
+    font-weight: 600;
   }
 
   /* css for small devices like phones 
@@ -34,13 +49,21 @@
                 <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
     
     
-                  <div class="d-flex justify-content-center py-4">
+                  <div class="d-flex justify-content-center py-4 mb-3">
                     <a href="/adminHome" class="logo d-flex align-items-center w-auto">
                       <img src="../images/logo.png" alt="">
                       <span class="d-none d-lg-block">LuxeWalk - Admin</span>
                     </a>
                   </div>
                   <!-- End Logo -->
+
+                  <div class="back-btn">
+                    <div style="width: 100%;" class="d-flex justify-content-end d-sm-end">
+                      <div class="mb-4 mx-2">
+                        <a href="/admin/products/manage" class="btn btn-outline-primary">Back to Products</a>
+                      </div>
+                    </div>
+                  </div>
     
                   <div class="card mb-3 wide-card">
     
@@ -153,12 +176,18 @@
     
                         <div class="col-lg-6 col-12">
                             <label for="price" class="form-label">Price</label>
-                            <input type="number" name="price" class="form-control" id="price" required  max="10000" min="0">
+                            <input type="number" name="price" class="form-control" id="price" required  max="10000" min="0" oninput="calculateDiscount()">
+                        </div>
+                        <div id="price-error" style="display: none; color: red; margin-top: 5px;">
+                          Please enter a value within 10000 !
                         </div>
 
                         <div class="col-lg-6 col-12">
                             <label for="discount" class="form-label">Discount (%) </label>
                             <input type="number" name="discount" class="form-control" id="discount" min="0" max="100" oninput="calculateDiscount()">
+                        </div>
+                        <div id="discount-error" style="display: none; color: red; margin-top: 5px;">
+                          Please enter a value within 100 !
                         </div>
 
                         <div class="col-lg-6 col-12">
@@ -268,20 +297,41 @@
     <!-- ======= Footer ======= -->
     <%- include('partials/adminFooter'); %>
     <!-- End Footer -->
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-      //-----------------------------------------------------------------------------------------------------------------------
-      // Discount calculation 
-      //-----------------------------------------------------------------------------------------------------------------------
-        function calculateDiscount(){
-            const price = parseFloat(document.getElementById('price').value) || 0 ;
-            const discount = parseFloat(document.getElementById('discount').value) || 0 ;
 
-            const discountAmount = (price * discount)/100;
-            const priceAfterDiscount = price - discountAmount;
+        //-----------------------------------------------------------------------------------------------------------------------
+        // Discount calculation 
+        //-----------------------------------------------------------------------------------------------------------------------
+        function calculateDiscount() {
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const discount = parseFloat(document.getElementById('discount').value) || 0;
+            const errorDiscount = document.getElementById('discount-error');
+            const errorPrice = document.getElementById('price-error');
+           
 
-            document.getElementById('discountAmount').value = discountAmount;
-            document.getElementById('priceAfterDiscount').value = priceAfterDiscount;
+            let discountAmount = 0;
+            let priceAfterDiscount = 0;
+
+            if(price > 10000){
+              errorPrice.style.display = 'block';
+            }else{
+              errorPrice.style.display = 'none';
+            }
+
+            if(discount > 100){
+              errorDiscount.style.display = 'block';
+            }else{
+              errorDiscount.style.display = 'none';
+            }
+
+            if (price > 0 && discount > 0) {
+                discountAmount = (price * discount) / 100;
+                priceAfterDiscount = price - discountAmount;
+            }
+
+          document.getElementById('discountAmount').value = discountAmount.toFixed(2);
+          document.getElementById('priceAfterDiscount').value = priceAfterDiscount.toFixed(2);
         }
 
         //-----------------------------------------------------------------------------------------------------------------------
@@ -300,7 +350,7 @@
         })
         
         //-----------------------------------------------------------------------------------------------------------------------------------
-        //category, size and image error handling
+        // form submision category, size and image error handling
         //-----------------------------------------------------------------------------------------------------------------------------------
         document.querySelector('.addProductForm').addEventListener('submit', (event) => {
           event.preventDefault();
@@ -334,8 +384,29 @@
             errorSizes.style.display = 'none';
           }
 
+          let discount = document.querySelector('input[name="discount"]');
+          let discountAmount = document.querySelector('input[name="discountAmount"]');
+          let priceAfterDiscount = document.querySelector('input[name="priceAfterDiscount"]');
+
+          if (discount.value === '') {
+              discount.value = 0;
+              discountAmount.value = 0;
+              priceAfterDiscount.value = 0;
+          }
+
+          // Parse the values for validation
+          let discountAmountValue = parseFloat(discountAmount.value);
+          let priceAfterDiscountValue = parseFloat(priceAfterDiscount.value);
+
+          // Check if the parsed values are NaN
+          if (isNaN(discountAmountValue) || isNaN(priceAfterDiscountValue)) {
+              event.preventDefault();
+              alert("Please ensure that the discount amount and price after discount are valid numbers.");
+              return false;
+          }
+
           // Image field
-          const input = document.querySelector('input[name="images"]');
+          let input = document.querySelector('input[name="images"]');
 
           if(files.length === 0){
             const errorImage = document.querySelector('.error-image');
@@ -347,7 +418,25 @@
             errorImage.style.display = 'none';
           }
 
-          event.target.submit();
+          const dataTransfer = new DataTransfer();
+          files.forEach(file => dataTransfer.items.add(file));
+          input.files = dataTransfer.files;
+          console.log(input.files);
+          console.log(sizes);
+          
+          Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, submit it!'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                event.target.submit();
+              }
+          });
 
         })
 
@@ -498,6 +587,8 @@
           input.value = '' ;
           showImages();
         })
+
+        
 
         
     </script>

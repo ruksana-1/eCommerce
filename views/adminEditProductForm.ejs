@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- adding admin head partials -->
+<!-- ======= Head ======= -->
+<%- include('partials/adminHead') %>
+<!-- End Head -->
+
+<style>
+  /* css for show the form more width in large screens */
+  @media (min-width: 992px) { 
+      .wide-card {
+          width: 200%;
+      }
+  }
+
+  @media (max-width:1000px) {
+      .back-btn {
+          width: 100%; 
+          display: flex; 
+          justify-content: flex-end; 
+      }
+  }
+
+  label{
+    font-weight: 600;
+  }
+  /* css for small devices like phones 
+  @media (max-width: 480px) {
+    .wide-card {
+      width: fit-content; 
+    }
+  }
+    */
+</style>
+
+<body>
+    
+    <main>
+        <div class="container">
+    
+          <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+    
+    
+                  <div class="d-flex justify-content-center py-4">
+                    <a href="/adminHome" class="logo d-flex align-items-center w-auto">
+                      <img src="../images/logo.png" alt="">
+                      <span class="d-none d-lg-block">LuxeWalk - Admin</span>
+                    </a>
+                  </div>
+                  <!-- End Logo -->
+
+                  <div class="back-btn">
+                    <div style="width: 100%;" class="d-flex justify-content-end d-sm-end">
+                      <div class="mb-4 mx-2">
+                        <a href="/admin/products/manage" class="btn btn-outline-primary">Back to Products</a>
+                      </div>
+                    </div>
+                  </div>
+    
+                  <div class="card mb-3 wide-card">
+    
+                    <div class="card-body">
+    
+                      <div class="pt-4 pb-2">
+                        <h5 class="card-title text-center pb-0 fs-4">Edit Product</h5>
+                        <p class="text-center text-warning">Only make the neccessary changes</p>
+                      </div>
+    
+                      <form class="row g-3  addProductForm"  action="/admin/products/manage/editProductDB" method="post" enctype="multipart/form-data" >
+                        <input type="hidden" name="id" value="<%= product._id %>">
+                        <div class="col-lg-6 col-12">
+                          <label for="brandName" class="form-label">Brand Name</label>
+                          <input type="text" name="brandName" class="form-control" id="brandName" required maxlength="16" value="<%= product.brandName %>">
+                          <div id="error-brandName" style="display: none; color: red; margin-top: 5px;"></div>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <label for="description" class="form-label">Description</label>
+                            <input type="text" name="description" class="form-control" id="description" required maxlength="200" value="<%= product.description %>">
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <label for="type" class="form-label">Type</label>
+                            <input type="text" name="type" class="form-control" id="type" required maxlength="10" value="<%= product.type %>">
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <label for="occation" class="form-label">Occation</label>
+                            <input type="text" name="occation" class="form-control" id="occation" required maxlength="10" value="<%= product.occation %>">
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                          <label for="category" class="form-label">Category</label>
+                          <select class="form-select" name="category">
+                              <% categories.forEach( category => { %>
+                                <option value="<%= category._id %>" <%= String(product.category._id) === String(category._id) ? 'selected' : '' %>><%= category.name %></option>
+                                <% }) %>
+                          </select>
+                          <div id="error-category" style="display: none; color: red; margin-top: 5px;" class="invalid-feedback">Please, Select a Category !</div>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <label for="sizes" class="form-label">Sizes Available</label>
+                            <div class="row" style="border: 1px solid lightgrey;
+                                                    border-radius: 3%;
+                                                    margin: 0 1%;
+                                                    padding: 2%;">
+                                <div class="col-6">
+                                    <strong>Sizes 1-6</strong>
+                                    <div>
+                                        <input type="checkbox" id="size1" name="sizes" value="1" <%= product.sizes.includes('1') ? 'checked' : '' %>>
+                                        <label for="size1">1</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="size2" name="sizes" value="2" <%= product.sizes.includes('2') ? 'checked' : '' %>>
+                                        <label for="size2">2</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="size3" name="sizes" value="3" <%= product.sizes.includes('3') ? 'checked' : '' %>>
+                                        <label for="size3">3</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="size4" name="sizes" value="4" <%= product.sizes.includes('4') ? 'checked' : '' %>>
+                                        <label for="size4">4</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="size5" name="sizes" value="5" <%= product.sizes.includes('5') ? 'checked' : '' %>>
+                                        <label for="size5">5</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="size6" name="sizes" value="6" <%= product.sizes.includes('6') ? 'checked' : '' %>>
+                                        <label for="size6">6</label>
+                                    </div>
+                                </div>
+                        
+                                <div class="col-6">
+                                    <strong>Sizes 7-12</strong>
+                                    <div>
+                                        <input type="checkbox" id="size7" name="sizes" value="7" <%= product.sizes.includes('7') ? 'checked' : '' %>>
+                                        <label for="size7">7</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="size8" name="sizes" value="8" <%= product.sizes.includes('8') ? 'checked' : '' %>>
+                                        <label for="size8">8</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="size9" name="sizes" value="9" <%= product.sizes.includes('9') ? 'checked' : '' %>>
+                                        <label for="size9">9</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="size10" name="sizes" value="10" <%= product.sizes.includes('10') ? 'checked' : '' %>>
+                                        <label for="size10">10</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="size11" name="sizes" value="11" <%= product.sizes.includes('11') ? 'checked' : '' %>>
+                                        <label for="size11">11</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="size12" name="sizes" value="12" <%= product.sizes.includes('12') ? 'checked' : '' %>>
+                                        <label for="size12">12</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="error-sizes" style="display: none; color: red; margin-top: 5px;" class="invalid-feedback">Please select available Sizes for the Product !</div>
+                        </div>
+    
+                        <div class="col-lg-6 col-12">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="number" name="price" class="form-control" id="price" required  max="10000" min="0" value="<%= product.price %>">
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <label for="discount" class="form-label">Discount (%) </label>
+                            <input type="number" name="discount" class="form-control" id="discount" min="0" max="100" oninput="calculateDiscount()" value="<%= product.discount %>">
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                          <label for="priceAfterDiscount" class="form-label">Price After Discount </label>
+                          <input type="number" name="priceAfterDiscount" class="form-control" id="priceAfterDiscount" readonly value="<%= product.priceAfterDiscount %>">
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <label for="discountAmount" class="form-label">Discount Amount </label>
+                            <input type="number" name="discountAmount" class="form-control" id="discountAmount" readonly value="<%= product.discountAmount %>">
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <label for="stockCount" class="form-label">Stock Count</label>
+                            <input type="number" name="stockCount" class="form-control" id="stockCount" required max="255" value="<%= product.stockCount %>">
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <label for="isFeatured" class="form-label">is Featured</label>
+                            <select class="form-select" name="isFeatured">
+                                <option value="false" <%= product.isFeatured === false ? 'selected' : ''%> > No</option>
+                                <option value="true" <%= product.isFeatured === true ? 'selected' : ''%> >Yes</option> 
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                          <label for="images" class="form-label">Drag & Drop images</label>
+                          <div class="imageInfo mb-2 d-flex justify-content-center text-success">
+                            No changes were made to the image files.
+                          </div>
+                          <div class="drag-drop">
+                            <span class="inner"> Drag & Drop image here or <span class="select">Browse</span></span>
+                            <input name="images" type="file"  multiple >
+                          </div>
+                          <div class="container-img">
+                            <% product.imagesPath.forEach( (image, index) => { %> 
+                                <div class="image">
+                                    <img src="/<%= image %>" alt="Product Image" onload="addToFile('<%= image %>', '<%= index %>')">
+                                    <span onclick="deleteImage('<%= index %>')">&times;</span>
+                                </div>
+                            <% }) %>
+                          </div>
+                          <div class="error-image" style="display: none; color: red; margin-top: 5px;">
+
+                          </div>
+                        </div>
+
+    
+                        <div class="mt-5">
+                            <% if(typeof err !== 'undefined') { %>
+                              <script>
+                                Swal.fire({
+                                  title: "<%= err %>",
+                                  icon: "error",
+                                  showClass: {
+                                    popup: `
+                                      animate__animated-
+                                      animate__fadeInUp
+                                      animate__faster
+                                    `
+                                  },
+                                  hideClass: {
+                                    popup: `
+                                      animate__animated
+                                      animate__fadeOutDown
+                                      animate__faster
+                                    `
+                                  }
+                                });
+                              </script>
+                            <% } %>
+                            <% if(typeof message !== 'undefined'){ %>
+                              <script>
+                                Swal.fire({
+                                  title: "<%= message %>",
+                                  icon: "success",                              
+                                  showClass: {
+                                    popup: `
+                                      animate__animated
+                                      animate__fadeInUp
+                                      animate__faster
+                                    `
+                                  },
+                                  hideClass: {
+                                    popup: `
+                                      animate__animated
+                                      animate__fadeOutDown
+                                      animate__faster
+                                    `
+                                  }
+                                });
+                              </script>                        
+                            <% } %>
+                        </div>
+    
+                        <div class="col-12 d-flex justify-content-between">
+                            <a href="/admin/products/manage" type="button" class="btn btn-outline-danger">Cancel</a>
+                          <button class="btn btn-outline-primary " type="submit">Create Account</button>
+                        </div>
+                      </form>
+    
+                    </div>
+                  </div>
+    
+                </div>
+              </div>
+            </div>
+    
+          </section>
+    
+        </div>
+      </main>
+      <!-- End #main -->
+
+    <!-- adding admin footer partials -->
+    <!-- ======= Footer ======= -->
+    <%- include('partials/adminFooter'); %>
+    <!-- End Footer -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        //-----------------------------------------------------------------------------------------------------------------------
+        // Discount calculation 
+        //-----------------------------------------------------------------------------------------------------------------------
+          function calculateDiscount(){
+              const price = parseFloat(document.getElementById('price').value) || 0 ;
+              const discount = parseFloat(document.getElementById('discount').value) || 0 ;
+  
+              const discountAmount = (price * discount)/100;
+              const priceAfterDiscount = price - discountAmount;
+  
+              document.getElementById('discountAmount').value = discountAmount.toFixed(2);
+              document.getElementById('priceAfterDiscount').value = priceAfterDiscount.toFixed(2);
+          }
+  
+          //-----------------------------------------------------------------------------------------------------------------------
+          //brand name character limit setting
+          //-----------------------------------------------------------------------------------------------------------------------
+          const brandName = document.querySelector('input[name="brandName"]');
+          const errorBrandName = document.getElementById('error-brandName');
+          
+          brandName.addEventListener('input', () => {
+            if(brandName.value.length > 15){
+              errorBrandName.textContent = 'Maximum character limit reached!'
+              errorBrandName.style.display ='block';
+            }else{
+              errorBrandName.style.display = 'none';
+            }
+          })
+          
+          //-----------------------------------------------------------------------------------------------------------------------------------
+          // form submision category, size and image error handling
+          //-----------------------------------------------------------------------------------------------------------------------------------
+          document.querySelector('.addProductForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+  
+            const category = document.querySelector('select[name="category"]').value;
+            const errorCategory = document.getElementById('error-category');
+              
+            //clear previous error messages
+            errorCategory.style.display = 'none';
+  
+            if(category === ''){
+              errorCategory.style.display = 'block';
+              // Scroll to the error
+              errorCategory.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+              return false;
+            }else{
+              errorCategory.style.display = 'none';
+            }
+  
+            const sizes = document.querySelectorAll('input[name="sizes"]:checked')
+            const errorSizes = document.getElementById('error-sizes');
+  
+            //clear previous error messages
+            errorSizes.style.display = 'none';
+  
+            if(sizes.length === 0){
+              errorSizes.style.display = 'block';
+              errorSizes.scrollIntoView({ behavior : 'smooth', block : 'center' });
+              return false;
+            }else{
+              errorSizes.style.display = 'none';
+            }
+
+            // Image field
+            let input = document.querySelector('input[name="images"]');
+            
+            const dataTransfer = new DataTransfer();
+            files.forEach(file => dataTransfer.items.add(file));
+            input.files = dataTransfer.files;
+            console.log(input.files);
+            console.log(sizes);
+
+            // Remove the existing images container before submission
+    const container = document.querySelector('.container-img');
+    if (container) {
+        container.remove(); // This removes the entire div from the DOM
+    }
+    
+            if(files.length === 0){
+              console.log(files.length)
+              Swal.fire({
+                title : 'No Images Selected',
+                text : " You didn't select any images. Are you sure you want to submit the form ?",
+                icon : 'warning',
+                showCancelButton : true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, submit it!',
+                cancelButtonText: 'Cancel'
+              }).then((result) => {
+                if(result.isConfirmed){
+                  
+                  Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, submit it!'
+                  }).then((result) => {
+                      if (result.isConfirmed) {
+                        event.target.submit();
+                      }
+                  });
+                }
+              })
+            }else{
+              Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, submit it!'
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                    event.target.submit();
+                  }
+              });
+            }
+  
+  
+          })
+  
+          //-----------------------------------------------------------------------------------------------------------------------
+          // Images Management
+          //-----------------------------------------------------------------------------------------------------------------------
+          let files = [],
+          dragdrop = document.querySelector('.drag-drop'),
+          container = document.querySelector('.container-img'),
+          text = document.querySelector('.inner'),
+          browse = document.querySelector('.select'),
+          input = document.querySelector('input[name="images"]');
+          maxImageFiles = 4;
+            
+          console.log(input.value);
+          console.log(input.files, input.file)
+          browse.addEventListener('click', () => input.click());
+
+          // Fuction to validate the number of image files
+          const validateFileCount = (fileList) => {
+            console.log( files.length, fileList.length);
+            return files.length + fileList.length <= maxImageFiles ;
+          }
+  
+          // Function to display error
+          const displayImageError = () => {
+              const errorImage = document.querySelector('.error-image');
+              errorImage.textContent = `You can only upload a maximum of ${maxImageFiles} images!`;
+              errorImage.style.display = 'block';
+          }
+  
+          // Function to hide error
+          const hideImageError = () => {
+            const errorImage = document.querySelector('.error-image');
+            errorImage.style.display = 'none';
+          }
+  
+          // input change event
+          input.addEventListener('change', (event) => {
+            let file = input.files;
+  
+            // check number of files
+            if(!validateFileCount(file)){
+              displayImageError();  
+            }else{
+              hideImageError();
+            }
+  
+            for( let i = 0; i < file.length; i++ ) {
+              if( files.every(e => e.name !== file[i].name)){
+                files.push(file[i])
+              }
+            }
+  
+            input.value = '' ;
+            showImages();
+          })
+  
+          const showImages = () => {
+            let images = '';
+            files.forEach( (e, i) => {
+              images += `<div class="image">
+                                  <img src="${URL.createObjectURL(e)}" alt="Image">
+                                  <span onclick="deleteImage(${i})">&times;</span>
+                                </div>`
+            })
+  
+            container.innerHTML = images;
+  
+            const imageInfo = document.querySelector('.imageInfo');
+            if(files.length > 0){
+              imageInfo.innerHTML = `<span style="color: green;"><strong>${files.length} new Image Added. </strong><span style="color:red";> Select all images again, this will overwrite the old files.</span></span>`;
+            }else{
+              imageInfo.innerHTML = `No changes were made to the image files.`
+            }
+          }
+  
+          var deleteImage = index => { 
+            files.splice(index, 1);
+  
+            const dataTransfer = new DataTransfer();
+            files.forEach(file => dataTransfer.items.add(file));
+            input.files = dataTransfer.files;
+            console.log(input.files);
+            if (!validateFileCount([])) {
+                displayImageError();
+            } else {
+                hideImageError();
+            }
+            showImages();
+            
+            
+          }
+   
+          // Function to work the browes after using drag & drop feature
+          const dragDropInput = () => {
+            
+            // Select the container to add the input field
+            const container = document.querySelector('.drag-drop');
+  
+            // Create the file input element
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.name = 'images';
+            fileInput.accept = 'image/*';
+            fileInput.multiple = true;
+  
+            // Append the file input to the container
+            container.appendChild(fileInput);
+            
+            let browse = document.querySelector('.select');
+            browse.addEventListener('click', () => input.click());
+          }
+  
+          // drag and drop
+          dragdrop.addEventListener('dragover', e => {
+            e.preventDefault();
+  
+            dragdrop.classList.add('dragover');
+            text.innerHTML = "Drop Image Here";
+          })
+  
+          dragdrop.addEventListener('dragleave', e => {
+            e.preventDefault();
+  
+            dragdrop.classList.remove('dragover');
+            text.innerHTML = `Drag & Drop image here or <span class="select">Browse</span>`;
+            
+            dragDropInput();
+  
+          })
+  
+          dragdrop.addEventListener('drop', e => {
+            e.preventDefault();
+  
+            dragdrop.classList.remove('dragover');
+            text.innerHTML = `Drag & Drop image here or <span class="select">Browse</span>`;
+            
+            dragDropInput();
+                   
+            let file = e.dataTransfer.files;
+  
+            if (!validateFileCount(file)) {
+                displayImageError();
+            } else {
+                hideImageError();
+            }
+  
+            for( let i = 0; i < file.length; i++ ) {
+              if( files.every(e => e.name !== file[i].name)){
+                files.push(file[i])
+              }
+            }
+  
+            input.value = '' ;
+            showImages();
+          })
+  
+          
+      </script>
+
+</body>
+</html>
