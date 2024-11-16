@@ -32,7 +32,7 @@
             </nav>
         </div><!-- End Page Title -->
         <br>
-        <h1 class="d-flex justify-content-center">All Products Information</h1>
+        <h1 class="d-flex justify-content-center" style="color: #012970; text-shadow: 1px 1px #b1b7ec;">All Products Information</h1>
         <br>
         
         <section class="section">
@@ -45,14 +45,14 @@
                           <h2 class="d-flex justify-content-center my-3 my-sm-5">Manage Products</h2>
                         </div>
     
-                        <div class="d-flex justify-content-end my-3 m-sm-5">
+                        <div class="d-flex justify-content-end my-2 m-sm-4">
                           <a class="btn btn-success" href="/admin/products/manage/add">ADD A NEW PRODUCT</a>
                         </div>
 
 
                         <!-- Table with hoverable rows -->
                         <div class="table-responsive">
-                            <table class="table table-hover datatable">
+                            <table class="table table-hover datatable pt-3">
                                 <thead>
                                     <tr>
                                         <th scope="col">No.</th>
@@ -83,7 +83,7 @@
                                                 </form>
                                             </td>
                                             <td scope="col">
-                                                <form action="/admin/products/manage/dalete" method="post">
+                                                <form action="/admin/products/manage/delete" method="post" id="deleteProduct">
                                                     <input type="hidden" name="id" value="<%= product._id %>">
                                                     <button class="btn btn-danger">Delete</button>
                                                 </form>
@@ -154,5 +154,30 @@
         <%- include('partials/adminFooter') %>
     <!-- End Footer -->
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+      const deleteForms = document.querySelectorAll('form[action="/admin/products/manage/delete"]');
+    
+      deleteForms.forEach(form => {
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+    
+          Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              form.submit(); 
+            }
+          });
+        });
+      });
+    </script>
 </body>
 </html>

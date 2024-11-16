@@ -187,7 +187,11 @@
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6><%= admin %></h6>
+              <% if (admin._id) { %>
+                <h6><%= admin.name %></h6>
+              <% }else { %> 
+                <h6><%= admin %></h6>
+              <% } %>
               <span>Admin</span>
             </li>
             <li>

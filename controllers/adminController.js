@@ -588,6 +588,29 @@ exports.adminDeleteCategory = async (req, res) => {
 // ADMIN PRODUCT MANAGEMENT
 //################################################################################################################
 
+exports.adminAllProdusts = async (req, res) => {
+    try{
+        const products = await Product.find().select('_id thumbnailsPath brandName category price stockCount').populate('category');
+
+        const productData = products.map( product => ({
+            _id : product._id,
+            thumbnailsPath : product.thumbnailsPath[0],
+            brandName : product.brandName,
+            description : product.description,
+            category : product.category,
+            price : product.price,
+            stockCount : product.stockCount,
+        }));
+
+        res.render('adminAllProducts', { admin : req.admin.name, products : productData });
+
+    } catch (error) {
+        console.error(error);
+        res.render('errorPage', {status : '500', error : 'Internal Server Error'});
+    }
+
+}
+
 exports.adminManageProducts = async (req, res) => {
     try{
         const products = await Product.find().select('_id thumbnailsPath brandName category price stockCount').populate('category');
@@ -795,4 +818,37 @@ exports.adminEditProductDB = async(req, res) => {
             res.render('adminManageProducts', { products : productData, admin : req.admin.role, err : 'Failed to edit product !' });
 
         }
+}
+
+exports.adminDeleteProduct = async(req, res) => {
+    try{
+        const id = req.body.id;
+
+        const product = await Product.findOne({ _id : id });
+
+        if(!product){
+            return res.render('adminManageProducts', { products : productData, admin : req.admin.role, err : 'Failed to delete the Product'});
+        }
+
+        deleteFiles(product.imagesPath);
+        deleteFiles(product.thumbnailsPath);
+
+        await Product.deleteOne({ _id : id});
+
+        const products = await Product.find({});
+        const productData = products.map( product => ({
+            _id : product._id,
+            thumbnailsPath : product.thumbnailsPath[0],
+            brandName : product.brandName,
+            description : product.description,
+            category : product.category,
+            price : product.price,
+            stockCount : product.stockCount,
+        }));
+        
+        return res.render('adminManageProducts', { products : productData, admin : req.admin.role, message : 'Product Deleted Successfully'});
+    } catch (error){
+        console.error('Error deleting the Product : ', error);
+        return res.render('errorPage', { status : '500', error : 'Internal server error'})
+    }
 }

@@ -10,7 +10,7 @@ const { adminLOGIN, adminREGISTER, adminRegister, adminLogin, adminLogout, admin
         adminProfile, adminEditProfile, adminChangePassword, 
         adminAllUsers, adminManageUsers, adminAddUser, adminAddUserDB, adminEditUser, adminEditUserDB, adminDeleteUser, adminBlockUser,adminBlockedUsers, adminRecentlyDeletedUsers, 
         adminCategory, adminAddCategory, adminAddCategoryDB, adminEditCategory, adminEditCategoryDB, adminDeleteCategory,
-        adminManageProducts, adminAddProduct, adminAddProductDB, adminViewProduct, adminEditProduct, adminEditProductDB,
+        adminAllProdusts, adminManageProducts, adminAddProduct, adminAddProductDB, adminViewProduct, adminEditProduct, adminEditProductDB, adminDeleteProduct
         } = require('../controllers/adminController');
 
 const router = express.Router();
@@ -74,10 +74,14 @@ router.post('/admin/products/category/delete', authenticateToken, adminDeleteCat
 // ADMIN PRODUCT MANAGEMENT
 //#########################################################################################################
 
+router.get('/admin/products/allProducts', authenticateToken, adminAllProdusts);
 router.get('/admin/products/manage', authenticateToken, adminManageProducts);
 router.get('/admin/products/manage/add', authenticateToken, adminAddProduct);
 router.post('/admin/products/manage/addProductDB', authenticateToken, upload.array('images'), adminAddProductDB);
 router.get('/admin/products/manage/view/:id', authenticateToken, adminViewProduct);
 router.post('/admin/products/manage/edit', authenticateToken, adminEditProduct);
-router.post('/admin/products/manage/editProductDB',authenticateToken, upload.array('images'), adminEditProductDB)
+router.post('/admin/products/manage/editProductDB', authenticateToken, upload.array('images'), adminEditProductDB);
+router.post('/admin/products/manage/delete', authenticateToken, adminDeleteProduct);
+
+
 module.exports = router;
