@@ -57,14 +57,6 @@
                   <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
                 </li>
 
-                <li class="nav-item">
-                  <button class="nav-link profile-edit-button" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
-                </li>
-
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
-                </li>
-
               </ul>
               <div class="tab-content pt-2">
 
@@ -73,7 +65,7 @@
                   <% if (admin.about) { %>
                     <p class="small fst-italic"><%= admin.about %></p>
                   <% } else { %>
-                    <p class="small fst-italic">Profile information not available.<b> To add your details go to <a href="#" class="edit-profile-link">Edit Profile</a></b></p>
+                    <p class="small fst-italic">Profile information not available.<b> To add your details go to <a href="/admin/profile/settings" class="edit-profile-link">Account Settings</a></b></p>
                   <% } %>
 
                   <h5 class="card-title">Profile Details</h5>
@@ -98,7 +90,7 @@
                     <% if (admin.country) { %>
                       <div class="col-lg-9 col-md-8"><%= admin.country %></div>
                     <% } else { %>
-                      <div class="col-lg-9 col-md-8">Profile information not available.<b> To add your details go to <a href="#" class="edit-profile-link">Edit Profile</a></b></div>
+                      <div class="col-lg-9 col-md-8">Profile information not available.<b> To add your details go to <a href="/admin/profile/settings" class="edit-profile-link">Account Settings</a></b></div>
                     <% } %>
                   </div>
 
@@ -107,7 +99,7 @@
                     <% if (admin.address) { %>
                       <div class="col-lg-9 col-md-8"><%= admin.address %></div>
                     <% } else { %>
-                      <div class="col-lg-9 col-md-8">Profile information not available.<b> To add your details go to <a href="#" class="edit-profile-link">Edit Profile</a></b></div>
+                      <div class="col-lg-9 col-md-8">Profile information not available.<b> To add your details go to <a href="/admin/profile/settings" class="edit-profile-link">Account Settings</a></b></div>
                     <% } %>
                   </div>
 
@@ -123,143 +115,10 @@
 
                 </div>
 
-                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
-                  <!-- Profile Edit Form -->
-                  <form class="editAdmin" method="post" action="/admin/profile/edit">
-                    <div class="row mb-3">
-                      <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
-                      <div class="col-md-8 col-lg-9">
-                        <img src="/images/no-profile.png" alt="Profile">
-                        
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="name" type="text" class="form-control" id="fullName" value="<%= admin.name %>">
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
-                      <div class="col-md-8 col-lg-9">
-                        <textarea name="about" class="form-control" id="about" style="height: 100px" 
-                          <% if ( admin.about ) { %> placeholder="<%= admin.about %>"
-                          <% } else { %> placeholder = 'Write about Yourself.' <% } %>></textarea>
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="company" type="text" class="form-control" id="company" value="LuxeWalk" disabled>
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="Job" class="col-md-4 col-lg-3 col-form-label">Role</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="role" type="text" class="form-control" id="Job" value="Admin" disabled>
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
-                      <div class="col-md-8 col-lg-9">
-                        <select name="country" class="form-control" id="Country">
-                          <option value="India">India</option> 
-                        </select>                                         
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="address" type="text" class="form-control" id="Address" 
-                        <% if ( admin.about ) { %> placeholder="<%= admin.adress %>"
-                          <% } else { %> placeholder = 'Add your Address.' <% } %>>
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="mobile" type="text" class="form-control" id="Phone" value="<%= admin.mobile %>" >
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="email" type="email" class="form-control" id="Email" value="<%= admin.email %>">
-                      </div>
-                    </div>
-
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </div>
-                  </form><!-- End Profile Edit Form -->
-
-                </div>
-
-                <div class="tab-pane fade pt-3" id="profile-change-password">
-                  <!-- Change Password Form -->
-                  <form class="changePassword" method="post" action="/admin/profile/changePassword">
-
-                    <div class="row mb-3">
-                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="password" type="password" class="form-control" id="currentPassword" required>
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="newPassword" type="password" class="form-control" id="newPassword" required>
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Confirm New Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="renewpassword" type="password" class="form-control" id="renewPassword" required>
-                      </div>
-                    </div>
-
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Change Password</button>
-                    </div>
-                  </form><!-- End Change Password Form -->
-
-                </div>
-
               </div><!-- End Bordered Tabs -->
 
             </div>
           </div>
-
-
-          <div class="mt-5">
-            <% if(typeof err !== 'undefined') { %>
-              <script>
-                Swal.fire({
-                  title: "<%= err %>",
-                  icon: "error",
-                });
-              </script>
-            <% } %>
-            <% if(typeof msg !== 'undefined'){ %>
-              <script>
-                Swal.fire({
-                  title: "<%= msg %>", 
-                  icon: "success",                        
-                });
-              </script>                          
-            <% } %>
-        </div>
 
         </div>
       </div>
@@ -272,95 +131,7 @@
   <%- include('partials/adminFooter') %>
   <!-- End Footer -->
 
-  <script>
-    document.querySelectorAll('.edit-profile-link').forEach(function(link) {
-      link.addEventListener('click', function(event) {
-        event.preventDefault();
-        document.querySelector('.profile-edit-button').click();
-      });
-    });
-
-    document.querySelector('.editAdmin').addEventListener('submit', function(event) {  
-      event.preventDefault();
-
-      var mobile = document.querySelector('input[name="mobile"]').value;  
-      var email = document.querySelector('input[name="email"]').value;  
-   
-      if (!mobile.match(/^\d{10}$/)) {  
-        Swal.fire({  
-        title: 'Invalid Mobile Number',  
-        icon: 'error',  
-      });  
-      return false;  
-      } 
-
-      if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {  
-        Swal.fire({  
-        title: 'Invalid Email',  
-        icon: 'error',  
-      });  
-      return false;  
-      }  
-    Swal.fire({  
-      title: 'Are you sure you want to save changes?',  
-      icon: 'question',  
-      showCancelButton: true,  
-      confirmButtonText: 'Yes, save changes',  
-      cancelButtonText: 'No, cancel',  
-    }).then((result) => {  
-      if (result.value) {  
-        this.submit();  
-      }  
-    });  
-  });
-    
-    document.querySelector('.changePassword').addEventListener('submit', function(event) {  
-      event.preventDefault();
-
-      var password = document.querySelector('input[name="password"]').value;
-      var newpassword = document.querySelector('input[name="newPassword"]').value;  
-      var renewpassword = document.querySelector('input[name="renewpassword"]').value;  
-   
-      if (password === newpassword) {  
-        Swal.fire({  
-        text: 'New password cannot be the same as the old password',  
-        icon: 'error',  
-      });  
-      return false;  
-      } 
-
-      if (newpassword.length < 6 || newpassword.length > 8) {  
-        Swal.fire({  
-        title: 'Password must be 6 - 8 digits.',  
-        icon: 'error',  
-      });  
-      return false;  
-      }  
-
-      if (newpassword !== renewpassword) {  
-        Swal.fire({  
-        title: 'Confirm Password is Incorrect',  
-        icon: 'error',  
-      });  
-      return false;  
-      }  
-
-      Swal.fire({  
-        title: 'Are you sure you want to save changes?',  
-        icon: 'question',  
-        showCancelButton: true,  
-        confirmButtonText: 'Yes, save changes',  
-        cancelButtonText: 'No, cancel',  
-      }).then((result) => {  
-        if (result.value) {  
-          this.submit();  
-        }  
-      });  
-    });
-    
-
-  </script>
-
 </body>
 
 </html>
+

@@ -5,7 +5,6 @@ const Category = require('../models/categorySchema');
 const bcrypt = require('bcrypt');
 const { createToken } = require('../middleware/jwtMiddleware');
 const blacklistToken = require('../utility/blacklistToken');
-const path = require('path');
 const Product = require('../models/productSchema');
 const { handleImageUploads } = require('../helpers/handleImageUploads');
 const { deleteFiles } = require('../helpers/deleteImageAndThumbnail');
@@ -191,6 +190,21 @@ exports.adminProfile = async (req, res) => {
     }
 };
 
+exports.adminProfileSettings = async(req, res) => {
+    if (req.cookies.jwt && req.admin.role === 'admin') {
+        const admin = await Admin.findOne({ email: req.admin.email });
+        if (!admin) {
+            return res.render('adminLogin', { error: 'Admin not found' });
+        }
+        
+        console.log('User:', req.user);
+        console.log('Admin:', admin);
+        res.render('adminProfileSettings', { admin });
+    } else {
+        res.render('adminLogin', { error: 'Unauthorized access' });
+    }
+}
+
 exports.adminEditProfile = async (req, res) => {
     if (req.cookies.jwt && req.admin.role === 'admin') {
         const { name, about, country, address, mobile, email } =req.body;
@@ -264,7 +278,7 @@ exports.adminChangePassword = async (req, res) => {
 exports.adminAllUsers = async (req, res) => {
     if(req.cookies.jwt && req.admin.role === 'admin'){
         try{
-            const userInfo = await User.find({});
+            const userInfo = await User.find({}).sort({ updatedAt : -1});
 
             return res.render('adminAllUsers',{userInfo : userInfo , admin : req.admin.name });
         }catch(error){
@@ -278,7 +292,7 @@ exports.adminManageUsers = async (req, res) => {
     if(req.cookies.jwt && req.admin.role === 'admin'){
         console.log('the admin email is ', req.admin.email);
         try{
-            const userInfo = await User.find({});
+            const userInfo = await User.find({}).sort({ updatedAt : -1 });
             return res.render('adminManageUsers', { userInfo : userInfo, admin : req.admin.name });
         } catch (error) {
             console.error(error);
@@ -337,7 +351,7 @@ exports.adminAddUserDB = async(req, res) => {
         }
     }
 }
-
+/*
 exports.adminEditUser = async (req, res) => {
     try{
         if(req.cookies.jwt && req.admin.role === 'admin'){
@@ -391,8 +405,8 @@ exports.adminEditUserDB = async (req, res) => {
         return res.render('errorPage', { error: 'Error Updating User', status : '500' });
       }
     }
-  }
-
+}
+*/
 exports.adminBlockUser  = async (req, res) => {
     try{
         if(req.cookies.jwt && req.admin.role === 'admin'){
@@ -404,7 +418,7 @@ exports.adminBlockUser  = async (req, res) => {
                 const blocked = !user.blocked;
                 const userInfo = await User.findOneAndUpdate({ userName: userName }, { $set: { blocked } }, { new: true });
 
-                const users = await User.find({});
+                const users = await User.find({}).sort({ updatedAt : -1});
 
                 res.render('adminManageUsers', { admin : req.admin.name, message: 'Successfull', userInfo: users });
             } else {
@@ -456,7 +470,7 @@ exports.adminDeleteUser = async (req, res) => {
 
 exports.adminBlockedUsers = async (req, res) => {
     if(req.cookies.jwt && req.admin.role === 'admin'){
-        const userInfo = await User.find({ blocked : true });
+        const userInfo = await User.find({ blocked : true }).sort({ updatedAt : -1});
 
         res.render('adminBlockedUsers', {userInfo : userInfo, admin : req.admin.name });
     }
@@ -466,7 +480,7 @@ exports.adminBlockedUsers = async (req, res) => {
 exports.adminRecentlyDeletedUsers = async (req, res) => {
     if(req.cookies.jwt && req.admin.role === 'admin'){
 
-        const userInfo = await DeletedUser.find({});
+        const userInfo = await DeletedUser.find({}).sort({ updatedAt : -1});
         
         res.render('adminRecentlyDeletedUsers', { userInfo : userInfo, admin : req.admin.name  });
     }
@@ -478,7 +492,7 @@ exports.adminRecentlyDeletedUsers = async (req, res) => {
 
 exports.adminCategory = async (req, res) => {
 
-    let category = await Category.find({}).populate('parent', 'name');
+    let category = await Category.find({}).populate('parent', 'name').sort({createdAt : -1});
     const admin = await Admin.findOne({ email : req.admin.email });
 
     console.log('categories : ', category);
@@ -588,9 +602,9 @@ exports.adminDeleteCategory = async (req, res) => {
 // ADMIN PRODUCT MANAGEMENT
 //################################################################################################################
 
-exports.adminAllProdusts = async (req, res) => {
+exports.adminAllProducts = async (req, res) => {
     try{
-        const products = await Product.find().select('_id thumbnailsPath brandName category price stockCount').populate('category');
+        const products = await Product.find().select('_id thumbnailsPath brandName category price stockCount').populate('category').sort({ updatedAt : -1 });
 
         const productData = products.map( product => ({
             _id : product._id,
@@ -613,7 +627,7 @@ exports.adminAllProdusts = async (req, res) => {
 
 exports.adminManageProducts = async (req, res) => {
     try{
-        const products = await Product.find().select('_id thumbnailsPath brandName category price stockCount').populate('category');
+        const products = await Product.find().select('_id thumbnailsPath brandName category price stockCount').populate('category').sort({ updatedAt : -1 });
 
         console.log(products);
 
@@ -792,7 +806,7 @@ exports.adminEditProductDB = async(req, res) => {
     
         }
 
-        const products = await Product.find({});
+        const products = await Product.find({}).sort({ updatedAt : -1 });
 
         const productData = products.map( product => ({
             _id : product._id,
@@ -826,6 +840,17 @@ exports.adminDeleteProduct = async(req, res) => {
 
         const product = await Product.findOne({ _id : id });
 
+        let products = await Product.find({}).sort({ updatedAt : -1 });
+        let productData = products.map( product => ({
+            _id : product._id,
+            thumbnailsPath : product.thumbnailsPath[0],
+            brandName : product.brandName,
+            description : product.description,
+            category : product.category,
+            price : product.price,
+            stockCount : product.stockCount,
+        }));
+
         if(!product){
             return res.render('adminManageProducts', { products : productData, admin : req.admin.role, err : 'Failed to delete the Product'});
         }
@@ -835,8 +860,8 @@ exports.adminDeleteProduct = async(req, res) => {
 
         await Product.deleteOne({ _id : id});
 
-        const products = await Product.find({});
-        const productData = products.map( product => ({
+        products = await Product.find({}).sort({ updatedAt : -1 });
+        productData = products.map( product => ({
             _id : product._id,
             thumbnailsPath : product.thumbnailsPath[0],
             brandName : product.brandName,

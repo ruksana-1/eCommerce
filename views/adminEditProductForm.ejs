@@ -102,9 +102,10 @@
                         <div class="col-lg-6 col-12">
                           <label for="category" class="form-label">Category</label>
                           <select class="form-select" name="category">
-                              <% categories.forEach( category => { %>
-                                <option value="<%= category._id %>" <%= String(product.category._id) === String(category._id) ? 'selected' : '' %>><%= category.name %></option>
-                                <% }) %>
+                            <option value="" disabled <%= !product.category ? 'selected' : '' %>>Unavailable</option>
+                            <% categories.forEach(category => { %>
+                                <option value="<%= category._id %>" <%= product.category && String(product.category._id) === String(category._id) ? 'selected' : '' %>><%= category.name %></option>
+                            <% }) %>
                           </select>
                           <div id="error-category" style="display: none; color: red; margin-top: 5px;" class="invalid-feedback">Please, Select a Category !</div>
                         </div>

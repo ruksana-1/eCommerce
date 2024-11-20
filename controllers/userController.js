@@ -1,7 +1,5 @@
-const { name } = require('ejs');
 const { User, PasswordReset } = require('../models/modelUserSchema');
 const bcrypt = require('bcrypt');
-const { text } = require('body-parser');
 const { createToken } = require('../middleware/jwtMiddleware');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');

@@ -62,7 +62,6 @@
                                     <th scope="col">Mobile</th>
                                     <th scope="col">CreatedAt</th>
                                     <th scope="col">UpdatedAt</th>
-                                    <th scope="col">Edit</th>
                                     <th scope="col">Block</th>
                                     <th scope="col">Delete</th>
                                 </tr>
@@ -77,7 +76,6 @@
                                         <td><%= userInfo.mobile %></td>
                                         <td><%= new Date(userInfo.createdAt).toLocaleString() %></td>
                                         <td><%= new Date(userInfo.updatedAt).toLocaleString() %></td>
-                                        <td><a href="/admin/users/manage/edit/<%= userInfo.userName %>" class="btn btn-warning">Edit</a></td>
                                         <% if(userInfo.blocked === false){ %>
                                             <td scope="col">
                                               <form action="/admin/users/manage/block" method="post">

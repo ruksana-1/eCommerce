@@ -101,7 +101,7 @@
                         <div class="col-lg-6 col-12">
                           <label for="category" class="form-label">Category</label>
                           <select class="form-select" name="category">
-                              <option value="" selected>Pleasse choose a Category !</option>
+                              <option value="" selected disabled>Pleasse choose a Category !</option>
                               <% categories.forEach( category => { %>
                                   <option value="<%= category._id %>"><%= category.name %></option> 
                               <% }) %>

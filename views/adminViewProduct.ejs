@@ -83,7 +83,7 @@
                             <p class="col-12 col-md-6"><b>Brand</b>  :  <%= product.brandName %></p>
                             <p class="col-12 col-md-6"><b>Type</b>  :  <%= product.type %></p>
                             <p class="col-12 col-md-6"><b>Occation</b>  :  <%= product.occation %></p>
-                            <p class="col-12 col-md-6"><b>Gender</b>  :  <%= product.category.name %></p>
+                            <p class="col-12 col-md-6"><b>Gender</b>  :  <%= product.category ? product.category.name : 'Unavailable' %></p>
                             <p class="col-12 col-md-6"><b>Stock Count</b>  :  <%= product.stockCount %></p>
                             <p class="col-12"><b>Is Featured</b>  :  <% if(product.isFeatured) { %> Yes <% } else { %> No <% } %></p>
                             <p class="col-12"><b>Description</b>  :  <%= product.description %></p>
@@ -95,7 +95,7 @@
                         <h5 class="pb-3"><b>Price Details</b></h5>
                         <div class="px-5">
                             <p class="col-12"><b>Original Price</b>  :  <%= product.price %></p>
-                            <p class="col-12"><b>Discount</b>  :  <% if(product.discount) { %> <span> <%= product.discount %>% </span> 
+                            <p class="col-12"><b>Discount</b>  :  <% if(product.discount) { %> <span> <%= product.discount %> </span> 
                                 <p class="col-12"><b>Discount Amount</b> :  <%= product.discountAmount %></p>
                                 <p class="col-12"><b>Price After Discount</b> :  <%= product.priceAfterDiscount %></p>
                                 <% } else { %> No <% } %>

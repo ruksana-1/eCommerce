@@ -7,10 +7,10 @@ const { home, login, signup,  forgotPassword,
 const { authenticateToken } = require('../middleware/jwtMiddleware');
 
 const { adminLOGIN, adminREGISTER, adminRegister, adminLogin, adminLogout, adminHome, 
-        adminProfile, adminEditProfile, adminChangePassword, 
-        adminAllUsers, adminManageUsers, adminAddUser, adminAddUserDB, adminEditUser, adminEditUserDB, adminDeleteUser, adminBlockUser,adminBlockedUsers, adminRecentlyDeletedUsers, 
+        adminProfile, adminProfileSettings, adminEditProfile, adminChangePassword, 
+        adminAllUsers, adminManageUsers, adminAddUser, adminAddUserDB, adminDeleteUser, adminBlockUser,adminBlockedUsers, adminRecentlyDeletedUsers, 
         adminCategory, adminAddCategory, adminAddCategoryDB, adminEditCategory, adminEditCategoryDB, adminDeleteCategory,
-        adminAllProdusts, adminManageProducts, adminAddProduct, adminAddProductDB, adminViewProduct, adminEditProduct, adminEditProductDB, adminDeleteProduct
+        adminAllProducts, adminManageProducts, adminAddProduct, adminAddProductDB, adminViewProduct, adminEditProduct, adminEditProductDB, adminDeleteProduct
         } = require('../controllers/adminController');
 
 const router = express.Router();
@@ -41,6 +41,7 @@ router.get('/adminHome', authenticateToken, adminHome);
 //########################################################################################
 
 router.get('/admin/profile/myProfile', authenticateToken, adminProfile);
+router.get('/admin/profile/settings', authenticateToken, adminProfileSettings)
 router.post('/admin/profile/edit', authenticateToken, adminEditProfile);
 router.post('/admin/profile/changePassword', authenticateToken, adminChangePassword);
 
@@ -52,8 +53,6 @@ router.get('/admin/users/allUsers', authenticateToken, adminAllUsers);
 router.get('/admin/users/manage', authenticateToken, adminManageUsers);
 router.get('/admin/users/manage/add', authenticateToken, adminAddUser);
 router.post('/admin/users/manage/addUserDB', authenticateToken, adminAddUserDB);
-router.get('/admin/users/manage/edit/:userName', authenticateToken, adminEditUser);
-router.post('/admin/users/manage/editUserDB/:userName', authenticateToken, adminEditUserDB);
 router.post('/admin/users/manage/delete', authenticateToken, adminDeleteUser);
 router.post('/admin/users/manage/block', authenticateToken, adminBlockUser);
 router.get('/admin/users/blocked', authenticateToken, adminBlockedUsers);
@@ -74,7 +73,7 @@ router.post('/admin/products/category/delete', authenticateToken, adminDeleteCat
 // ADMIN PRODUCT MANAGEMENT
 //#########################################################################################################
 
-router.get('/admin/products/allProducts', authenticateToken, adminAllProdusts);
+router.get('/admin/products/allProducts', authenticateToken, adminAllProducts);
 router.get('/admin/products/manage', authenticateToken, adminManageProducts);
 router.get('/admin/products/manage/add', authenticateToken, adminAddProduct);
 router.post('/admin/products/manage/addProductDB', authenticateToken, upload.array('images'), adminAddProductDB);
